@@ -1,0 +1,299 @@
+{
+  "UI5 TSX View skeleton": {
+    "scope": "typescriptreact",
+    "prefix": "ui5-view",
+    "description": "UI5 TSX View — full skeleton with getControllerName, getAutoPrefixId, createContent",
+    "body": [
+      "import View from \"sap/ui/core/mvc/View\";",
+      "import type Control from \"sap/ui/core/Control\";",
+      "import App from \"sap/m/App\";",
+      "import Page from \"sap/m/Page\";",
+      "",
+      "/** @namespace ${1:dt.bookshop}.view */",
+      "export default class ${2:App}View extends View {",
+      "",
+      "  getAutoPrefixId(): boolean { return true; }",
+      "",
+      "  getControllerModuleName(): string {",
+      "    return \"dt/bookshop/controller/${2:App}\";",
+      "  }",
+      "",
+      "  createContent(): Control {",
+      "    return (",
+      "      <App>",
+      "        <Page title=\"${3:My App}\">",
+      "          $0",
+      "        </Page>",
+      "      </App> as Control",
+      "    );",
+      "  }",
+      "}"
+    ]
+  },
+
+  "UI5 TSX Main View skeleton": {
+    "scope": "typescriptreact",
+    "prefix": "ui5-view-main",
+    "description": "UI5 TSX Main View — full skeleton with getControllerName, getAutoPrefixId, createContent",
+    "body": [
+      "import View from \"sap/ui/core/mvc/View\";",
+      "import type Control from \"sap/ui/core/Control\";",
+      "import Page from \"sap/m/Page\";",
+      "",
+      "/** @namespace ${1:dt.bookshop}.view */",
+      "export default class ${2:Main}View extends View {",
+      "",
+      "  getAutoPrefixId(): boolean { return true; }",
+      "",
+      "  getControllerModuleName(): string {",
+      "    return \"dt/bookshop/controller/${2:Main}\";",
+      "  }",
+      "",
+      "  createContent(): Control {",
+      "    return (",
+      "      <Page title=\"Hello Devs 👋\">",
+      "        $0",
+      "      </Page> as Control",
+      "    );",
+      "  }",
+      "}"
+    ]
+  },
+
+  "UI5 TSX Controller skeleton": {
+    "scope": "typescript",
+    "prefix": "ui5-controller",
+    "description": "UI5 Controller skeleton with @namespace JSDoc",
+    "body": [
+      "import Controller from \"sap/ui/core/mvc/Controller\";",
+      "import type Event from \"sap/ui/base/Event\";",
+      "",
+      "/** @namespace ${1:dt.bookshop}.controller */",
+      "export default class ${2:App} extends Controller {",
+      "",
+      "  onInit(): void {",
+      "    $0",
+      "  }",
+      "",
+      "}"
+    ]
+  },
+
+  "UI5 TSX Main Controller skeleton": {
+    "scope": "typescript",
+    "prefix": "ui5-controller-main",
+    "description": "UI5 Main Controller skeleton with @namespace JSDoc",
+    "body": [
+      "import Controller from \"sap/ui/core/mvc/Controller\";",
+      "import type Event from \"sap/ui/base/Event\";",
+      "",
+      "/** @namespace ${1:dt.bookshop}.controller */",
+      "export default class ${2:Main} extends Controller {",
+      "",
+      "  onInit(): void {",
+      "    $0",
+      "  }",
+      "",
+      "}"
+    ]
+  },
+
+  "UI5 TSX For directive": {
+    "scope": "typescriptreact",
+    "prefix": "ui5-for",
+    "description": "For directive with factory child fn — aggregation list binding",
+    "body": [
+      "<For each={{ path: \"${1:/Books}\" }}>",
+      "  {() => (",
+      "    <${2:ColumnListItem} press=\".${3:onSelect}\" type=\"Active\">",
+      "      $0",
+      "    </${2:ColumnListItem}>",
+      "  )}",
+      "</For>"
+    ]
+  },
+
+  "UI5 Datasource": {
+    "scope": "json",
+    "prefix": "ui5-datasource",
+    "description": "Datasource",
+    "body": [
+      "\"bookshop\": {", 
+      "  \"uri\": \"/browse/\",", 
+      "  \"type\": \"OData\",", 
+      "  \"settings\": {", 
+      "    \"odataVersion\": \"4.0\"", 
+      "  }", 
+      "}", 
+    ]
+  },
+
+  "UI5 Model": {
+    "scope": "json",
+    "prefix": "ui5-model",
+    "description": "Model",
+    "body": [
+      "\"\": {",
+      "  \"dataSource\": \"bookshop\",",
+      "  \"settings\": {",
+      "    \"synchronizationMode\": \"None\",",
+      "    \"operationMode\": \"Server\"",
+      "  }",
+      "},",
+    ]
+  },
+
+  "UI5 TSX Table with For": {
+    "scope": "typescriptreact",
+    "prefix": "ui5-table",
+    "description": "Full Table with named columns aggregation + For binding",
+    "body": [
+      "<Table",
+      "  id=\"booksTable\"",
+      "  growing={true}",
+      "  growingThreshold={10}",
+      "  columns={[",
+      "    <Column><Text text=\"${2:Title}\" /></Column>,",
+      "    $3",
+      "  ]}>",
+      "  <For each={{ path: \"${1:/Books}\" }}>",
+      "    {() => (",
+      "      <ColumnListItem press=\".${4:onSelect}\" type=\"Active\">",
+      "        <Text text=\"{${5:title}}\" />",
+      "        $0",
+      "      </ColumnListItem> as Control",
+      "    )}",
+      "  </For>",
+      "</Table>"
+    ]
+  },
+
+  "UI5 TSX ObjectStatus with state formatter": {
+    "scope": "typescriptreact",
+    "prefix": "ui5-objectstatus",
+    "description": "ObjectStatus with text + state bound via formatter function",
+    "body": [
+      "<ObjectStatus",
+      "  text=\"{${1:stock}}\"",
+      "  state={{ path: \"${1:stock}\", formatter: formatter.${2:stockState} }}",
+      "/>"
+    ]
+  },
+
+  "UI5 TSX Composite parts binding": {
+    "scope": "typescriptreact",
+    "prefix": "ui5-parts",
+    "description": "Composite binding with multiple paths and inline formatter",
+    "body": [
+      "{ parts: [\"${1:price}\", \"${2:currency_code}\"], formatter: (${3:p}: ${4:number}, ${5:c}: ${6:string}) => `\\${${3:p}} \\${${5:c}}` }"
+    ]
+  },
+
+  "UI5 V4 action binding (bindContext + execute)": {
+    "scope": "typescript",
+    "prefix": "ui5-v4-action",
+    "description": "OData V4 action binding pattern: bindContext + setParameter + execute",
+    "body": [
+      "async onSubmitOrder(): Promise<void> {",
+      "  const oModel = this.getView().getModel() as ODataModel;",
+      "  const bookDetails = this.byId(\"bookDetails\") as VBox;",
+      "  const stepInput = this.byId(\"stepInput\") as StepInput;",
+      "  const oBinding = bookDetails.getElementBinding();",
+      "  const sPath = oBinding.getPath();",
+      "  const oContext = oBinding.getBoundContext();",
+      "  const bookID = parseInt(sPath.match(/.*\\((\\d+)\\)/)[1]);",
+      "  const quantity = stepInput.getValue();",
+      "  const title = (oContext.getObject() as { title: string }).title;",
+      "  const oOperation = oModel.bindContext(\"/submitOrder(...)\");",
+      "  oOperation.setParameter(\"book\", bookID);",
+      "  oOperation.setParameter(\"quantity\", quantity);",
+      "  try {",
+      "    await oOperation.invoke();",
+      "    MessageToast.show(`Order successful (${ title }, ${ quantity } pcs.)`);",
+      "    oModel.refresh();",
+      "    bookDetails.setVisible(false);",
+      "  } catch (oError) {",
+      "    console.error(\"submitOrder failed\", oError);",
+      "  }",
+      "}",
+    ]
+  },
+
+  "UI5 V4 bindElement from event context": {
+    "scope": "typescript",
+    "prefix": "ui5-bindelement",
+    "description": "onSelect pattern: get binding context from event source, bindElement on a container",
+    "body": [
+      "onSelect(event: Event): void {",
+      "  const context = (event.getSource() as unknown as { getBindingContext(): Context }).getBindingContext();",
+      "  const ${1:bookDetails} = this.byId(\"${2:bookDetails}\") as ${3:VBox};",
+      "  ${1:bookDetails}.bindElement(context.getPath());",
+      "  ${1:bookDetails}.setVisible(true);",
+      "}"
+    ]
+  },
+
+  "UI5 TSX SearchField with filter": {
+    "scope": "typescript",
+    "prefix": "ui5-search-filter",
+    "description": "onSearch handler: read query, filter ListBinding by Contains",
+    "body": [
+      "onSearch(event: Event): void {",
+      "  const sQuery = (event.getParameter as (name: string) => string)(\"newValue\");",
+      "  const oTable = this.byId(\"booksTable\") as Table;",
+      "  const oBinding = oTable.getBinding(\"items\") as ListBinding;",
+      "  if (sQuery) {",
+      "    oBinding.filter([new Filter(\"${2:title}\", FilterOperator.Contains, sQuery)]);",
+      "  } else {",
+      "    oBinding.filter([]);",
+      "  }",
+      "}"
+    ]
+  },
+
+  "UI5 TSX If directive": {
+    "scope": "typescriptreact",
+    "prefix": "ui5-if",
+    "description": "If directive — bound condition adds visible binding to children",
+    "body": [
+      "<If condition={{ path: \"${1:/showDetails}\" }}>",
+      "  $0",
+      "</If>"
+    ]
+  },
+
+  "UI5 TSX formatter module": {
+    "scope": "typescript",
+    "prefix": "ui5-formatter",
+    "description": "Formatter module skeleton with @namespace JSDoc",
+    "body": [
+      "  ${2:stockState}(${3:stock}: number): string {",
+      "    if (${3:stock} >= 20) return \"Success\";",
+      "    if (${3:stock} > 0) return \"Warning\";",
+      "    return \"Error\";",
+      "  },",
+    ]
+  },
+
+  "UI5 TSX detsails": {
+    "scope": "typescriptreact",
+    "prefix": "ui5-details",
+    "description": "Details section skeleton with VBox, HBox, Button, and StepInput",
+    "body": [
+      "<VBox id=\"bookDetails\" visible={false} class=\"sapUiMediumMargin\">",
+      "  <Title text=\"{title}\" titleStyle=\"H2\" class=\"sapUiSmallMarginBottom\" />",
+      "  <Text text=\"{descr}\" wrapping={true} class=\"sapUiSmallMarginBottom\" />",
+      "  <HBox justifyContent=\"End\" alignItems=\"Center\">",
+      "    <Button",
+      "      text=\"Order\"",
+      "      press=\".onSubmitOrder\"",
+      "      class=\"sapUiSmallMarginEnd\"",
+      "    />",
+      "    <StepInput id=\"stepInput\" min={1} max=\"{stock}\" value={1} width=\"10rem\" />",
+      "  </HBox>",
+      "</VBox>",
+    ]
+  },
+
+
+}

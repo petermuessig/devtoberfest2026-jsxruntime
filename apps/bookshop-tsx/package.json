@@ -1,0 +1,22 @@
+{
+  "name": "bookshop-tsx",
+  "version": "1.0.0",
+  "description": "UI5 bookshop app with TSX views — Devtoberfest 2026",
+  "private": true,
+  "scripts": {
+    "start": "ui5 serve",
+    "build": "ui5 build",
+    "ts-typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@babel/plugin-transform-react-jsx": "^7",
+    "@openui5/types": "1.153.0",
+    "@ui5/cli": "4.0.70",
+    "typescript": "6.0.3",
+    "ui5-middleware-simpleproxy": "^3.9.0",
+    "ui5-tooling-transpile": "^3.13.1"
+  },
+  "dependencies": {
+    "@ui5-community/jsx-runtime": "^0.1.5"
+  }
+}

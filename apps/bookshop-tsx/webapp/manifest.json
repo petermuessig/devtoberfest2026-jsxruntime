@@ -1,0 +1,65 @@
+{
+  "_version": "1.65.0",
+  "sap.app": {
+    "id": "sap.codejam",
+    "type": "application",
+    "title": "Bookshop",
+    "description": "Bookshop UI5 app with TSX views",
+    "applicationVersion": {
+      "version": "1.0.0"
+    },
+    "dataSources": {
+      "bookshop": {
+        "uri": "/browse/",
+        "type": "OData",
+        "settings": {
+          "odataVersion": "4.0"
+        }
+      }
+    },
+    "i18n": "i18n/i18n.properties"
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {},
+    "deviceTypes":{
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "rootView": {
+      "viewName": "module:sap/codejam/view/App",
+      "id": "app"
+    },
+    "dependencies": {
+      "minUI5Version": "1.153.0",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.ui.layout": {},
+        "ui5.community.jsx.runtime": {}
+      }
+    },
+    "models": {
+      "": {
+        "dataSource": "bookshop",
+        "settings": {
+          "synchronizationMode": "None",
+          "operationMode": "Server"
+        }
+      },
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "sap.codejam.i18n.i18n"
+        }
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    }
+  }
+}

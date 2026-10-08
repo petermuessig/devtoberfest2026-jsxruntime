@@ -1,0 +1,12 @@
+{
+  "name": "devtoberfest-2026-jsxruntime",
+  "private": true,
+  "workspaces": [
+    "cap/bookshop",
+    "apps/bookshop-tsx"
+  ],
+  "scripts": {
+    "start": "npm run --workspace=bookshop watch"
+  },
+  "description": "Devtoberfest 2026 session: UI5 Views, Reimagined - Type-Safe TSX for a Modern Dev Experience"
+}

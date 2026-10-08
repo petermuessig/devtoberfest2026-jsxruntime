@@ -1,0 +1,14 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# OS
+.DS_Store
+
+# Local env files
+*.local
+
+# Playwright MCP session data
+.playwright-mcp/

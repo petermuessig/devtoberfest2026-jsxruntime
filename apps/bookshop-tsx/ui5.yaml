@@ -1,0 +1,44 @@
+specVersion: '4.0'
+metadata:
+  name: bookshop-tsx
+type: application
+
+customConfiguration:
+  config-ui5-tooling-transpile: &config-ui5-tooling-transpile
+    transformTypeScript: true
+    transformJSX:
+      runtime: automatic
+      importSource: "ui5/community/jsx/runtime"
+    transpileDependencies: true
+
+builder:
+  settings:
+    includeDependency:
+      - ui5.community.jsx.runtime
+  customTasks:
+    - name: ui5-tooling-transpile-task
+      afterTask: replaceVersion
+      configuration:
+        <<: *config-ui5-tooling-transpile
+
+server:
+  customMiddleware:
+    - name: ui5-tooling-transpile-middleware
+      afterMiddleware: compression
+      configuration:
+        <<: *config-ui5-tooling-transpile
+
+    - name: ui5-middleware-simpleproxy
+      afterMiddleware: compression
+      mountPath: /browse
+      configuration:
+        baseUri: "http://localhost:4004/browse"
+
+framework:
+  name: OpenUI5
+  version: "1.153.0"
+  libraries:
+    - name: sap.m
+    - name: sap.ui.core
+    - name: sap.ui.layout
+    - name: themelib_sap_horizon

@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UI5 Views, Reimagined: Type-Safe TSX for a Modern Dev Experience</title>
+
+  <!-- reveal.js from CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css" />
+  <!-- Code highlighting -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/monokai.css" />
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ── Devtoberfest 2026 theme overrides ──────────────────────────────── */
+    :root {
+      --dts-indigo:   #17124A;
+      --dts-purple:   #4B2FD6;
+      --dts-magenta:  #FF4FA3;
+      --dts-teal:     #1FD1A5;
+      --dts-blue:     #3B7DED;
+      --dts-white:    #FFFFFF;
+      --dts-dim:      rgba(255,255,255,0.6);
+    }
+
+    .reveal-viewport {
+      background: radial-gradient(ellipse at 60% 30%, #2D1B8B 0%, #17124A 55%, #0F0A2E 100%);
+    }
+
+    /* Faint decorative arc */
+    .reveal-viewport::before {
+      content: '';
+      position: fixed;
+      top: -200px; right: -200px;
+      width: 900px; height: 900px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.05);
+      pointer-events: none;
+    }
+
+    .reveal {
+      font-family: 'Montserrat', system-ui, sans-serif;
+      color: var(--dts-white);
+    }
+
+    .reveal h1, .reveal h2, .reveal h3 {
+      font-family: 'Montserrat', system-ui, sans-serif;
+      font-weight: 900;
+      text-transform: none;
+      letter-spacing: -0.02em;
+      color: var(--dts-white);
+      text-shadow: none;
+    }
+
+    .reveal h1 { font-size: 2.1em; line-height: 1.15; }
+    .reveal h2 { font-size: 1.45em; }
+    .reveal h3 { font-size: 1.05em; color: var(--dts-teal); }
+
+    .reveal p  { font-weight: 400; opacity: 0.9; }
+    .reveal li { margin: 0.25em 0; }
+
+    .reveal pre {
+      font-size: 0.52em;
+      border-radius: 8px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+      overflow: hidden !important;
+    }
+    .reveal pre code, .reveal pre .hljs {
+      overflow: hidden !important;
+      max-height: none !important;
+    }
+
+    .reveal code {
+      font-family: 'Fira Code', monospace;
+      background: rgba(255,255,255,0.1);
+      padding: 0.1em 0.35em;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+
+    .reveal pre code { background: none; padding: 0; font-size: 1em; }
+
+    /* Accent pill */
+    .pill {
+      display: inline-block;
+      padding: 0.1em 0.7em;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.75em;
+      vertical-align: middle;
+    }
+    .pill-magenta { background: var(--dts-magenta); color: #fff; }
+    .pill-teal    { background: var(--dts-teal);    color: #1a1a2e; }
+    .pill-blue    { background: var(--dts-blue);    color: #fff; }
+
+    /* Accent dots */
+    .dot {
+      display: inline-block;
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+    .dot-magenta { background: var(--dts-magenta); }
+    .dot-teal    { background: var(--dts-teal); }
+    .dot-blue    { background: var(--dts-blue); }
+
+    /* Diamond/gem glyph */
+    .gem {
+      display: inline-block;
+      width: 36px; height: 36px;
+      background: white;
+      clip-path: polygon(50% 0%, 85% 30%, 50% 100%, 15% 30%);
+      position: relative;
+    }
+    .gem::after {
+      content: '✦';
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: var(--dts-indigo);
+    }
+
+    /* Section label */
+    .section-label {
+      display: inline-block;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 6px;
+      padding: 0.2em 0.8em;
+      font-size: 0.65em;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--dts-teal);
+      margin-bottom: 0.5em;
+    }
+
+    /* Two-column layout */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2em;
+      align-items: start;
+      text-align: left;
+    }
+    .two-col > * { width: 100%; }
+
+    /* Comparison boxes */
+    .compare-box {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 10px;
+      padding: 1em 1.2em;
+    }
+    .compare-box h4 {
+      margin: 0 0 0.5em;
+      font-size: 0.85em;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .compare-box.good  { border-color: var(--dts-teal); }
+    .compare-box.bad   { border-color: rgba(255,79,163,0.4); }
+
+    /* Footer on every slide */
+    .slide-footer {
+      position: fixed;
+      bottom: 16px; left: 0; right: 0;
+      text-align: center;
+      font-size: 0.5em;
+      opacity: 0.4;
+      pointer-events: none;
+      z-index: 99;
+    }
+
+    /* Big number / stat */
+    .big-stat {
+      font-size: 3.5em;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    /* Tag line for section intros */
+    .tagline {
+      font-size: 1.4em;
+      font-weight: 700;
+      opacity: 0.85;
+    }
+
+    /* Dim text */
+    .dim { opacity: 0.5; }
+
+    /* Accent heading color */
+    .accent-teal    { color: var(--dts-teal); }
+    .accent-magenta { color: var(--dts-magenta); }
+    .accent-blue    { color: var(--dts-blue); }
+
+    /* ✓ check items */
+    .check-list { list-style: none; padding: 0; }
+    .check-list li::before { content: '✓  '; color: var(--dts-teal); font-weight: 700; }
+    .cross-list { list-style: none; padding: 0; }
+    .cross-list li::before { content: '✗  '; color: var(--dts-magenta); font-weight: 700; }
+    .soon-list  { list-style: none; padding: 0; }
+    .soon-list li::before { content: '🔜  '; }
+
+    /* Slim code comparison */
+    .code-vs {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 0.5em;
+      align-items: center;
+    }
+    .vs-label {
+      font-size: 1.2em;
+      font-weight: 900;
+      opacity: 0.4;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Persistent footer -->
+<div class="slide-footer">
+  Devtoberfest by SAP TechEd &nbsp;·&nbsp; By developers, for developers. &nbsp;·&nbsp; Sep 21 – Oct 18, 2026
+</div>
+
+<div class="reveal">
+<div class="slides">
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 1 — TITLE
+═════════════════════════════════════════════════════════════════ -->
+<section data-background-gradient="radial-gradient(ellipse at 60% 30%, #2D1B8B 0%, #17124A 55%, #0F0A2E 100%)">
+  <div style="text-align:left; padding: 0 0.5em;">
+    <div style="margin-bottom:1.2em">
+      <span class="gem"></span>&nbsp;
+      <span style="font-size:0.6em; opacity:0.6; vertical-align:middle; font-weight:700; letter-spacing:0.1em; text-transform:uppercase">Devtoberfest 2026</span>
+    </div>
+    <h1>UI5 Views,<br><span class="accent-teal">Reimagined</span></h1>
+    <p class="tagline" style="margin-top:0.4em">Type-Safe TSX for a Modern Dev Experience</p>
+    <p style="margin-top:2em; font-size:0.65em; opacity:0.5">
+      <span class="dot dot-magenta"></span>ready to use&nbsp;&nbsp;
+      <span class="dot dot-teal"></span>community&nbsp;&nbsp;
+      <span class="dot dot-blue"></span>@ui5-community/jsx-runtime
+    </p>
+  </div>
+  <aside class="notes">
+    Welcome to the session! Today we're going to look at something experimental and exciting:
+    writing UI5 views with TypeScript JSX — the same TSX syntax you may know from React,
+    but without React. Just UI5, but with full type safety in the view layer.
+    Let me start with a question.
+  </aside>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 2 — HOOK / QUESTION
+═════════════════════════════════════════════════════════════════ -->
+<section>
+  <blockquote style="border-left: 4px solid var(--dts-magenta); padding-left:1em; font-size:1.4em; font-style:normal; font-weight:700; max-width:800px; margin:0 auto; text-align:left;">
+    "You shouldn't have to choose between<br>
+    <span class="accent-teal">declarative</span> and <span class="accent-magenta">type-safe</span>."
+  </blockquote>
+  <p style="margin-top:2em; font-size:0.75em; opacity:0.6;">
+    — the question that started this project
+  </p>
+  <aside class="notes">
+    In UI5 today you have a choice: XMLViews are beautifully declarative — they look like UI code.
+    But they have zero TypeScript checking. If you mistype a property name, you find out at runtime.
+    On the other hand, you can write views in JavaScript/TypeScript directly (new Button({...})) —
+    but that's imperative and hard to read. There was no middle ground. Until now.
+  </aside>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 3 — THE TWO WORLDS TODAY
+═════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="section-label">The status quo</div>
+  <h2>Two worlds, neither complete</h2>
+  <div class="two-col" style="margin-top:0.8em">
+    <div class="compare-box bad" style="padding:0.7em 1em">
+      <h4 style="color: var(--dts-magenta)">XMLView <span class="pill pill-magenta">today</span></h4>
+      <ul class="check-list" style="font-size:0.72em">
+        <li>Declarative, readable</li>
+        <li>Familiar to UI5 devs</li>
+      </ul>
+      <ul class="cross-list" style="font-size:0.72em; margin-top:0.4em">
+        <li>No TypeScript checking</li>
+        <li>No autocomplete on props</li>
+        <li>Typos found at runtime</li>
+        <li>No refactoring support</li>
+      </ul>
+    </div>
+    <div class="compare-box bad" style="padding:0.7em 1em">
+      <h4 style="color: var(--dts-blue)">JS/TS Views <span class="pill pill-blue">today</span></h4>
+      <ul class="check-list" style="font-size:0.72em">
+        <li>Fully typed</li>
+        <li>IDE autocomplete</li>
+      </ul>
+      <ul class="cross-list" style="font-size:0.72em; margin-top:0.4em">
+        <li>Imperative — hard to read</li>
+        <li><code>new Button({text:"…"})</code></li>
+        <li>Deeply nested = painful</li>
+        <li>Hard to see the component tree</li>
+      </ul>
+    </div>
+  </div>
+  <p style="margin-top:0.8em; font-size:0.75em; opacity:0.7">
+    We want the <span class="accent-teal">readability of XML</span> with the <span class="accent-magenta">type safety of TypeScript</span>.
+  </p>
+  <aside class="notes">
+    XMLViews look like UI. You can read them top to bottom and see the component tree.
+    But TypeScript doesn't understand them at all.
+
+    JS/TS views are fully typed — but they look like imperative configuration code.
+    Deeply nested structures become very hard to read.
+
+    What if we could have both?
+  </aside>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 4 — WHAT IS JSX / TSX?
+═════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="section-label">JSX primer</div>
+  <h2>What is JSX / TSX?</h2>
+  <div class="two-col" style="margin-top:1em; font-size:0.85em">
+    <div>
+      <p><span class="dot dot-teal"></span><strong>JSX</strong> — XML-like syntax that compiles to function calls</p>
+      <p><span class="dot dot-magenta"></span><strong>TSX</strong> — JSX + TypeScript = fully typed view code</p>
+      <p style="margin-top:1em; font-size:0.85em; opacity:0.7">
+        Not a framework. Not a runtime library. A <em>syntax transform.</em>
+      </p>
+    </div>
+    <div>
+      <pre><code class="language-tsx" data-trim>
+// What you write:
+&lt;Button text="Order" press=".onOrder" /&gt;
+
+// What Babel compiles it to:
+_jsx(Button, { text: "Order",
+               press: ".onOrder" })
+
+// What our runtime does:
+new Button({ text: "Order",
+             press: ".onOrder" })
+      </code></pre>
+    </div>
+  </div>
+  <div style="margin-top:1.2em; background:rgba(255,255,255,0.05); border-radius:8px; padding:0.8em 1.2em; font-size:0.75em; border-left:3px solid var(--dts-teal)">
+    The JSX/TSX transform is just <strong>syntactic sugar over constructor calls</strong>. No framework. No VDOM. No reconciler.
+  </div>
+  <aside class="notes">
+    JSX was invented by the React team but it's not React-specific. It's a syntax extension
+    that any compiler can support. TypeScript has had JSX support since day one.
+
+    The key insight: JSX compiles to function calls. React uses _jsx(Component, props) to create
+    VDOM nodes. We use a different runtime that calls new Control(props) instead.
+
+    So the TypeScript compiler checks your props against the UI5 control types — same compiler,
+    different runtime target.
+  </aside>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 5 — WE DID THIS BEFORE
+═════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="section-label">Motivation</div>
+  <h2>We've done this before</h2>
+  <p style="font-size:0.85em; opacity:0.8; margin-bottom:1.5em">
+    Remember when TypeScript came to UI5 controllers? Same story.
+  </p>
+  <div class="two-col" style="font-size:0.8em">
+    <div>
+      <h3>TypeScript in UI5 (controllers)</h3>
+      <ul class="check-list">
+        <li>Type-checked event handlers</li>
+        <li>Autocomplete on models, APIs</li>
+        <li>Refactoring across files</li>
+        <li>Catch bugs at compile time</li>
+      </ul>
+    </div>
+    <div>
+      <h3>TSX in UI5 (views)</h3>
+      <ul class="check-list">
+        <li>Type-checked <em>control props</em></li>
+        <li>Autocomplete on every attr.</li>
+        <li>Refactoring across views</li>
+        <li>Catch typos at compile time</li>
+      </ul>
+    </div>
+  </div>
+  <p style="margin-top:1.2em; font-size:0.8em; text-align:center">
+    TSX extends the type-safety story from <span class="accent-magenta">controllers</span> to <span class="accent-teal">views</span>.
+  </p>
+  <aside class="notes">
+    When TypeScript came to UI5, the value proposition was exactly: type safety and IDE/tooling
+    out of the box — in the controller layer. That story was compelling enough that it's now
+    the recommended way to write UI5.
+
+    TSX is the same story, one layer up: now your views get the same treatment.
+    And because the rest — models, controllers, bindings, i18n — stays exactly the same,
+    you can adopt it incrementally.
+  </aside>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 6 — HOW IT WORKS (3-layer diagram)
+═════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="section-label">Architecture</div>
+  <h2>How it works in UI5</h2>
+  <div style="display:flex; flex-direction:column; gap:0.35em; margin-top:0.6em; font-size:0.74em">
+    <div style="background:rgba(59,125,237,0.15); border:1px solid var(--dts-blue); border-radius:8px; padding:0.45em 1em; display:flex; align-items:center; gap:0.7em">
+      <span style="font-size:1.3em">🔷</span>
+      <div><strong>TypeScript compiler</strong> &nbsp;<span class="dim">— checks <code>$XSettings</code> types: prop typos, wrong types, missing props</span></div>
+    </div>
+    <div style="text-align:center; opacity:0.4; font-size:0.9em">↓</div>
+    <div style="background:rgba(255,79,163,0.15); border:1px solid var(--dts-magenta); border-radius:8px; padding:0.45em 1em; display:flex; align-items:center; gap:0.7em">
+      <span style="font-size:1.3em">⚙️</span>
+      <div><strong>Babel <code>@babel/plugin-transform-react-jsx</code> v7</strong> &nbsp;<span class="dim">— <code>&lt;Button/&gt;</code> → <code>_jsx(Button, {})</code> · via <code>ui5-tooling-transpile</code></span></div>
+    </div>
+    <div style="text-align:center; opacity:0.4; font-size:0.9em">↓</div>
+    <div style="background:rgba(29,209,165,0.15); border:1px solid var(--dts-teal); border-radius:8px; padding:0.45em 1em; display:flex; align-items:center; gap:0.7em">
+      <span style="font-size:1.3em">🟢</span>
+      <div><strong>JSX runtime <code>@ui5-community/jsx-runtime</code></strong> &nbsp;<span class="dim">— <code>jsx(Button, props)</code> → <code>new Button(props)</code>, resolves aggregations &amp; directives</span></div>
+    </div>
+  </div>
+  <p style="margin-top:0.6em; font-size:0.7em; opacity:0.6; text-align:center">
+    <strong>No React. No VDOM. No reconciler.</strong> Reactivity = UI5 data binding (unchanged).
+  </p>
+  <aside class="notes">
+    Three layers:
+    1. TypeScript compiler: checks your props at COMPILE time against the UI5 control type definitions.
+    2. Babel transform: turns JSX syntax into function calls. This happens at build/serve time.
+    3. The runtime shim: tiny library, ~100 lines. It receives the function call and calls new Control().
+       It also handles aggregations, binding strings, and structural directives like <For> and <If>.
+
+    UI5 data binding is completely unchanged. Bindings still flow through the model layer.
+    The runtime only touches object construction.
+  </aside>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 7 — WHAT YOU GET
+═════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="section-label">Benefits</div>
+  <h2>What you get</h2>
+  <div class="two-col" style="margin-top:1em; font-size:0.82em">
+    <ul class="check-list">
+      <li>Per-control prop typing against <code>$XSettings</code></li>
+      <li>IDE autocomplete on <em>every</em> attribute</li>
+      <li>Rename / go-to-definition on views</li>
+      <li>Catch typos like <code>ttle=</code> at compile time</li>
+      <li>Native JS loops & conditionals in views</li>
+    </ul>
+    <ul class="check-list">
+      <li>All bindings unchanged: <br/><code>"{i18n>key}"</code></li>
+      <li>All aggregations unchanged</li>
+      <li>All controllers unchanged</li>
+      <li>All routing/i18n unchanged</li>
+      <li>Full coexistence with XMLViews</li>
+    </ul>
+  </div>
+  <div style="margin-top:1.2em; background:rgba(255,255,255,0.05); border-radius:8px; padding:0.7em 1.2em; font-size:0.75em">
+    <pre><code class="language-tsx" data-trim>
+// TypeScript catches this immediately — in your editor, before you run anything:
+&lt;Column ttle="Book" /&gt;
+//       ^^^^ TS2322: Type '{ ttle: string }' is not assignable to type 'Column$Settings'
+    </code></pre>
+  </div>
+  <aside class="notes">
+    This is the headline benefit: the same TypeScript that already checks your controller code
+    now also checks your view code. You get autocomplete, go-to-definition, rename across views
+    and controllers.
+
+    And crucially: everything else stays the same. If you know UI5 bindings and controllers,
+    you already know 90% of what you need. The only new thing is the view syntax.
+  </aside>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 8 — OVERVIEW OF CAPABILITIES
+═════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="section-label">Capabilities</div>
+  <h2>What you can do</h2>
+  <div class="two-col" style="font-size:0.78em; margin-top:0.8em">
+    <div>
+      <h3>Controls &amp; aggregations</h3>
+      <pre><code class="language-tsx" data-trim>
+// Default aggregation = children
+&lt;Panel&gt;
+  &lt;Button text="Click" /&gt;
+&lt;/Panel&gt;
+
+// Named aggregation = prop
+&lt;Table columns={[
+  &lt;Column /&gt;, &lt;Column /&gt;
+]}&gt;
+      </code></pre>
+    </div>
+    <div>
+      <h3>Bindings &amp; events</h3>
+      <pre><code class="language-tsx" data-trim>
+// String binding (same as XML)
+&lt;Text text="{i18n>hello}" /&gt;
+
+// Object binding (formatter)
+&lt;Text text={{ path, formatter }} /&gt;
+
+// Expression binding
+state="{= ${stock} &gt;= 20 ? 'Success' : 'Error' }"
+
+// Dot-handler event
+press=".onSelect"
+// Or typed function ref
+press={(e) =&gt; console.log(e)}
+      </code></pre>
+    </div>
+  </div>
+  <div style="margin-top:0.8em; font-size:0.72em; opacity:0.7; text-align:center">
+    <span class="dot dot-teal"></span>Structural directives: <code>&lt;For&gt;</code> · <code>&lt;If&gt;</code> &nbsp;&nbsp;
+    <span class="dot dot-blue"></span>Nested views · Coexistence with XML
+  </div>
+  <aside class="notes">
+    Let me give you a quick overview of the full surface area.
+
+    Controls: each imported class IS the JSX tag. default aggregation = children, named aggregations = props.
+
+    Bindings: string form works exactly like XML — {"path"} syntax, i18n>, expression bindings, all of it.
+    Object form { path, formatter } for TypeScript formatters. Both work.
+
+    Events: dot-handler string ".onSelect" resolves against the controller. Function ref for inline typed handlers.
+
+    Structural directives For and If — we'll use those in the demo.
+
+    Full coexistence: TSX views can embed XML views and vice versa.
+  </aside>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 9 — DIRECTIVES: FOR + IF
+═════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="section-label">Directives</div>
+  <h2 style="font-size:1.2em">Structural directives: <code class="accent-teal">&lt;For&gt;</code> &amp; <code class="accent-magenta">&lt;If&gt;</code></h2>
+  <div class="two-col" style="font-size:0.72em; margin-top:0.8em">
+    <div>
+      <h3>&lt;For&gt; — bound list</h3>
+      <pre><code class="language-tsx" data-trim>
+import { For } from "ui5/community/jsx/runtime/jsx-runtime";
+
+// Explicit: each= + factory child
+&lt;For each={{ path: "/Books" }}&gt;
+  {() =&gt; (
+    &lt;StandardListItem title="{title}" /&gt;
+  )}
+&lt;/For&gt;
+
+// Implicit: items= on the parent
+&lt;List items={{ path: "/Books" }}&gt;
+  &lt;StandardListItem title="{title}" /&gt;
+&lt;/List&gt;
+
+// String binding
+&lt;List items="{/Books}"&gt;
+  &lt;StandardListItem title="{title}" /&gt;
+&lt;/List&gt;
+      </code></pre>
+    </div>
+    <div>
+      <h3>&lt;If&gt; — conditional</h3>
+      <pre><code class="language-tsx" data-trim>
+import { If } from "ui5/community/jsx/runtime/jsx-runtime";
+
+// Literal: resolved at construction time
+&lt;If condition={true}&gt;
+  &lt;Text text="Always here" /&gt;
+&lt;/If&gt;
+
+&lt;If condition={false}&gt;
+  &lt;Text text="Never here (dropped)" /&gt;
+&lt;/If&gt;
+
+// Bound: adds visible binding on children
+&lt;If condition={{ path: "/showDetails" }}&gt;
+  &lt;FlexBox id="details"&gt;...&lt;/FlexBox&gt;
+&lt;/If&gt;
+      </code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    Two structural directives ship with the runtime.
+
+    For: renders a bound list. Three spellings are equivalent — use the one that reads best to you.
+    The factory function is the row template. The runtime calls control.bindAggregation() under the hood.
+
+    If: two modes. Literal condition is resolved at construction time — child is either included or dropped,
+    no binding overhead. Bound condition adds a visible=true/false binding to each child at runtime.
+    Either way, no extra wrapper DOM element.
+  </aside>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 10 — TRANSITION TO HANDS-ON
+═════════════════════════════════════════════════════════════════ -->
+<section data-background-gradient="radial-gradient(ellipse at 30% 70%, #2D1B8B 0%, #17124A 60%, #0F0A2E 100%)">
+  <div style="text-align:center">
+    <div class="gem" style="width:60px;height:60px;margin:0 auto 1.2em"></div>
+    <h2 style="font-size:2em">Time to build</h2>
+    <p class="tagline" style="opacity:0.8">We have a given CAP bookshop backend serving <code>/browse</code>.</p>
+    <p class="tagline" style="opacity:0.8">Let's build its UI — <span class="accent-teal">entirely in TSX</span>.</p>
+    <div style="margin-top:2em; font-size:0.7em; opacity:0.5">
+      <span class="dot dot-magenta"></span>EasyUI5 generator &nbsp;&nbsp;
+      <span class="dot dot-teal"></span>JSX runtime config &nbsp;&nbsp;
+      <span class="dot dot-blue"></span>10 steps &nbsp;&nbsp;
+      <span class="dot dot-magenta"></span>100% TSX views
+    </div>
+    <p style="margin-top:1.5em; font-size:0.65em; opacity:0.45">
+      Docs: <a href="https://ui5-community.github.io/jsx-runtime/" style="color:inherit">ui5-community.github.io/jsx-runtime</a>
+    </p>
+  </div>
+  <aside class="notes">
+    OK, enough theory — let's build something. Switch to the terminal.
+    Follow the WALKTHROUGH.md file alongside me.
+    At the end we'll have a fully working bookshop app with not a single XML view.
+  </aside>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 11 — BACK FROM DEMO: WHAT WE BUILT
+═════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="section-label">What we built</div>
+  <h2>Zero XMLViews</h2>
+  <div class="two-col" style="margin-top:1em; font-size:0.8em">
+    <div>
+      <h3>The same app as the CodeJam</h3>
+      <ul class="check-list">
+        <li>OData V4 model from CAP</li>
+        <li>Bound Table</li>
+        <li>Data Formatter</li>
+        <li>Search filter on title</li>
+        <li>Row select → details pane</li>
+        <li><code>submitOrder</code> action</li>
+      </ul>
+    </div>
+    <div>
+      <h3>But with full type safety</h3>
+      <pre><code class="language-tsx" data-trim>
+// App.tsx — the whole view
+export default class AppView extends View {
+  getAutoPrefixId() { return true; }
+  getControllerModuleName() {
+    return "sap/codejam/controller/App";
+  }
+  createContent(): Control {
+    return (
+      &lt;App&gt;
+        &lt;Page title="{i18n&gt;Bookshop}"&gt;
+          &lt;For each={{ path: "/Books" }}&gt;
+            {() =&gt; &lt;ColumnListItem .../&gt;}
+          &lt;/For&gt;
+        &lt;/Page&gt;
+      &lt;/App&gt;
+    );
+  }
+}
+      </code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    We built the same bookshop app as in the SAP CodeJam — same backend, same controller,
+    same i18n, same bindings. The only thing that changed was the view syntax.
+
+    And now we have TypeScript checking every prop, every binding path, every event name.
+  </aside>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 12 — THE VIEW ANATOMY RECAP
+═════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="section-label">Key concepts</div>
+  <h2>The TSX view anatomy</h2>
+  <pre><code class="language-tsx" data-trim style="font-size:0.63em">
+import View from "sap/ui/core/mvc/View";
+import type Control from "sap/ui/core/Control";
+import Page from "sap/m/Page";
+
+/** @namespace sap.codejam.view */      // ① AMD module registration (required)
+export default class AppView extends View {
+  getAutoPrefixId(): boolean {          // ② scopes IDs — prevents duplicate ID warnings
+    return true;
+  }
+  getControllerModuleName(): string {   // ③ wire a separate *.controller.ts
+    return "sap/codejam/controller/App";
+  }
+  createContent(): Control {            // ④ the view — returns the root control
+    return &lt;Page title="{i18n&gt;Bookshop}" /&gt;;
+  }
+}
+  </code></pre>
+  <p style="font-size:0.7em; margin-top:1em; opacity:0.7">
+    Reference in <code>manifest.json</code>:
+    <code>"viewName": "module:sap/codejam/view/App"</code>
+    &nbsp;<span class="pill pill-magenta">module: prefix required</span>
+  </p>
+  <aside class="notes">
+    Four things to remember for every TSX view:
+    1. @namespace JSDoc — required for AMD module registration
+    2. getAutoPrefixId() — scopes all control IDs to this view instance (prevents duplicate ID
+       warnings when the view is used more than once; XMLViews do this implicitly)
+    3. getControllerModuleName() — wires the separate controller, same as controllerName= in XML
+    4. createContent() — returns the root control, JSX inside
+
+    In manifest.json, reference the view with the module: prefix + slash path.
+    Without module:, UI5 looks for an XMLView and you get a 404.
+  </aside>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 13 — LIMITATIONS
+═════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="section-label">Honest limitations</div>
+  <h2>What's not there yet</h2>
+  <div class="two-col" style="margin-top:0.8em; font-size:0.8em">
+    <div>
+      <h3><span class="accent-magenta">Current gaps</span></h3>
+      <ul class="cross-list">
+        <li>HTML intrinsics (<code>&lt;div&gt;</code>, <code>&lt;span&gt;</code>) are missing</li>
+        <li>No Flex (UI5 flexibility) out of the box</li>
+      </ul>
+    </div>
+    <div>
+      <h3><span class="accent-teal">Roadmap</span></h3>
+      <ul class="soon-list">
+        <li>HTML renderer plugin in progress</li>
+        <li>Flex via <em>same</em> pre-render hooks as XML (ChildrenProcessor / Scope SPI)</li>
+        <li>Stabilisation &amp; docs polish</li>
+      </ul>
+    </div>
+  </div>
+  <div style="margin-top:0.6em; background:rgba(29,209,165,0.1); border:1px solid rgba(29,209,165,0.4); border-radius:8px; padding:0.4em 1em; font-size:0.7em">
+    <span class="dot dot-teal"></span><strong>Ready to use today.</strong>
+    Official release will be mostly API-compatible — only runtime internals may change. Your view code won't need rewriting.
+  </div>
+  <aside class="notes">
+    Let me be honest about what's not there yet.
+
+    HTML intrinsics: you can write <div> in a TSX view and TypeScript won't complain.
+    But at runtime, the runtime doesn't know how to render a native HTML element yet.
+    A plugin to handle that is in progress.
+
+    Flex/UI5 flexibility: the runtime exposes the same SPI hooks as XMLViews —
+    ChildrenProcessor and Scope. So Flex support is achievable via the same mechanism XML uses.
+    It hasn't been wired up yet.
+
+    On the "experimental" label: use it. It works today. The official release will be mostly
+    API-compatible — only the runtime internals may change, not the view code you write.
+    So you won't have to rewrite your App.tsx when it goes stable.
+  </aside>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 14 — CALL FOR FEEDBACK
+═════════════════════════════════════════════════════════════════ -->
+<section data-background-gradient="radial-gradient(ellipse at 40% 60%, #2D1B8B 0%, #17124A 60%, #0F0A2E 100%)">
+  <div class="section-label">Community</div>
+  <h2>This is your project too</h2>
+  <p style="font-size:0.85em; opacity:0.8; margin:1em 0">
+    The runtime is <span class="accent-teal">ready to use today</span>.<br/>
+    Your feedback shapes what gets added next.
+  </p>
+  <div style="display:flex; flex-direction:column; gap:0.7em; font-size:0.8em; margin-top:1.2em">
+    <div style="background:rgba(255,255,255,0.07); border-radius:8px; padding:0.7em 1.2em">
+      <span class="dot dot-magenta"></span>
+      Try it on a real project — even a small one
+    </div>
+    <div style="background:rgba(255,255,255,0.07); border-radius:8px; padding:0.7em 1.2em">
+      <span class="dot dot-teal"></span>
+      Open issues for bugs, missing features, unclear docs
+    </div>
+    <div style="background:rgba(255,255,255,0.07); border-radius:8px; padding:0.7em 1.2em">
+      <span class="dot dot-blue"></span>
+      PRs welcome — the codebase is approachable
+    </div>
+  </div>
+  <p style="margin-top:1.5em; font-size:0.75em; opacity:0.6">
+    🔗 github.com/ui5-community/jsx-runtime
+  </p>
+  <aside class="notes">
+    The runtime exists because people in the UI5 community wanted something better.
+    The core is solid — you can build real apps with it today, as we just did.
+    An official release will be mostly API-compatible; only the runtime internals may change,
+    not the TSX view code you write.
+
+    What makes it stable and complete is people using it and reporting what they find.
+    Open an issue, open a PR, try it on a project. Every piece of feedback moves it forward.
+  </aside>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 15 — SETUP CHEATSHEET
+═════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="section-label">Quick reference</div>
+  <h2>Setup in 4 steps</h2>
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.6em; margin-top:0.8em; font-size:0.6em">
+    <div class="compare-box good">
+      <h4 style="color:var(--dts-teal)">1. Install</h4>
+      <pre><code class="language-bash" data-trim>
+npm i @ui5-community/jsx-runtime
+npm i -D \
+  @babel/plugin-transform-react-jsx@^7
+npm i -D ui5-tooling-transpile@^3.12
+      </code></pre>
+    </div>
+    <div class="compare-box good">
+      <h4 style="color:var(--dts-teal)">2. tsconfig.json</h4>
+      <pre><code class="language-json" data-trim>
+{
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource":
+      "ui5/community/jsx/runtime",
+    "types": [
+      "@openui5/types",
+      "@ui5-community/jsx-runtime"
+    ]
+  }
+}
+      </code></pre>
+    </div>
+    <div class="compare-box good">
+      <h4 style="color:var(--dts-teal)">3. ui5.yaml (key parts)</h4>
+      <pre><code class="language-yaml" data-trim>
+builder:
+  settings:
+    includeDependency: [ui5.community.jsx.runtime]
+  customTasks:
+    - name: ui5-tooling-transpile-task
+      configuration:
+        transformJSX:
+          runtime: automatic
+          importSource: "ui5/community/jsx/runtime"
+      </code></pre>
+    </div>
+    <div class="compare-box good">
+      <h4 style="color:var(--dts-teal)">4. index.html + manifest.json</h4>
+      <pre><code class="language-json" data-trim>
+// index.html resourceroots:
+"ui5.community.jsx.runtime":
+  "./resources/ui5/community/jsx/runtime/"
+
+// manifest.json libs:
+"ui5.community.jsx.runtime": {}
+      </code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    If you want to try this yourself after today, here's the four-step setup cheatsheet.
+    The full details are in WALKTHROUGH.md in the session repo.
+  </aside>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 16 — COMMON GOTCHAS
+═════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="section-label">Gotchas</div>
+  <h2>Things to watch out for</h2>
+  <div style="font-size:0.75em; margin-top:0.8em">
+    <div style="background:rgba(255,255,255,0.05); border-radius:8px; padding:0.5em 1em; margin-bottom:0.5em; border-left:3px solid var(--dts-magenta)">
+      <strong>❶ <code>jsxImportSource</code>: AMD namespace, not the npm package name</strong><br>
+      <span class="dim">✅ <code>"ui5/community/jsx/runtime"</code> &nbsp; ✗ <code>"@ui5-community/jsx-runtime"</code></span>
+    </div>
+    <div style="background:rgba(255,255,255,0.05); border-radius:8px; padding:0.5em 1em; margin-bottom:0.5em; border-left:3px solid var(--dts-magenta)">
+      <strong>❷ <code>module:</code> prefix in manifest rootView/routing</strong><br>
+      <span class="dim">✅ <code>"module:sap/codejam/view/App"</code> &nbsp; ✗ <code>"sap.codejam.view.App"</code></span>
+    </div>
+    <div style="background:rgba(255,255,255,0.05); border-radius:8px; padding:0.5em 1em; margin-bottom:0.5em; border-left:3px solid var(--dts-magenta)">
+      <strong>❸ Add <code>resource-roots</code> for the runtime in <code>index.html</code></strong><br>
+      <span class="dim">Without it: 404 loading <code>ui5/community/jsx/runtime/jsx-runtime.js</code></span>
+    </div>
+    <div style="background:rgba(255,255,255,0.05); border-radius:8px; padding:0.5em 1em; border-left:3px solid var(--dts-magenta)">
+      <strong>❹ <code>getAutoPrefixId(): true</code> on every view</strong><br>
+      <span class="dim">Without it: control IDs are global — duplicate ID warnings when view is instantiated &gt;1×</span>
+    </div>
+  </div>
+  <aside class="notes">
+    Four gotchas that catch almost everyone the first time:
+
+    1. jsxImportSource is the AMD/ES module path, not the npm package name.
+    Use the slash-form namespace. This is the #1 confusing thing.
+
+    2. In manifest.json, TSX views need the module: prefix. XML views use a dotted class name.
+    Without module:, UI5 tries to load an XMLView and fails.
+
+    3. Resource roots: without this entry in index.html, the browser can't load the runtime at all.
+
+    4. getAutoPrefixId: XMLViews do this automatically. TSX views don't.
+    Without it, control IDs are global and you'll get duplicate ID warnings if the view
+    is instantiated more than once. byId() still works — it's about ID scoping, not lookup.
+  </aside>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 17 — RESOURCES
+═════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="section-label">Resources</div>
+  <h2>Links &amp; docs</h2>
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.8em; font-size:0.8em; margin-top:1em">
+    <div style="background:rgba(255,255,255,0.05); border-radius:8px; padding:0.8em 1.2em">
+      <p style="margin:0 0 0.3em"><span class="dot dot-teal"></span><strong>Runtime repo + docs</strong></p>
+      <p class="dim" style="margin:0; font-size:0.85em">github.com/ui5-community/jsx-runtime</p>
+      <p class="dim" style="margin:0.2em 0 0; font-size:0.75em">docs/ · showcase app · hello-world</p>
+      <p class="dim" style="margin:0.2em 0 0; font-size:0.75em">
+        <a href="https://ui5-community.github.io/jsx-runtime/" style="color:inherit; opacity:0.8">ui5-community.github.io/jsx-runtime</a>
+      </p>
+    </div>
+    <div style="background:rgba(255,255,255,0.05); border-radius:8px; padding:0.8em 1.2em">
+      <p style="margin:0 0 0.3em"><span class="dot dot-blue"></span><strong>This session's repo</strong></p>
+      <p class="dim" style="margin:0; font-size:0.85em">github.com/petermuessig/devtoberfest-2026-jsxruntime</p>
+      <p class="dim" style="margin:0.2em 0 0; font-size:0.75em">apps/bookshop-tsx · slides</p>
+    </div>
+    <div style="background:rgba(255,255,255,0.05); border-radius:8px; padding:0.8em 1.2em">
+      <p style="margin:0 0 0.3em"><span class="dot dot-magenta"></span><strong>SAP CodeJam (original)</strong></p>
+      <p class="dim" style="margin:0; font-size:0.85em">github.com/SAP-samples/ui5-exercises-codejam</p>
+      <p class="dim" style="margin:0.2em 0 0; font-size:0.75em">The same app in XMLViews — great comparison</p>
+    </div>
+    <div style="background:rgba(255,255,255,0.05); border-radius:8px; padding:0.8em 1.2em">
+      <p style="margin:0 0 0.3em"><span class="dot dot-teal"></span><strong>CAP bookshop docs</strong></p>
+      <p class="dim" style="margin:0; font-size:0.85em">cap.cloud.sap/docs/get-started/bookshop</p>
+      <p class="dim" style="margin:0.2em 0 0; font-size:0.75em">How the backend was bootstrapped</p>
+    </div>
+  </div>
+  <aside class="notes">
+    All the links you need. The runtime repo has detailed docs covering every concept we touched today.
+    The showcase app has runnable examples for every feature.
+    This session's repo has the finished bookshop app plus the full demo script.
+  </aside>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 18 — THANK YOU / CLOSE
+═════════════════════════════════════════════════════════════════ -->
+<section data-background-gradient="radial-gradient(ellipse at 50% 40%, #2D1B8B 0%, #17124A 55%, #0F0A2E 100%)">
+  <div style="text-align:center">
+    <div class="gem" style="width:72px;height:72px;margin:0 auto 1.5em"></div>
+    <h1 style="font-size:2.2em">Thank you! ✨</h1>
+    <p class="tagline" style="opacity:0.8; margin-top:0.5em">
+      Type-safe UI5 views are <span class="accent-teal">real</span> and <span class="accent-magenta">yours to try</span>.
+    </p>
+    <div style="margin-top:2em; font-size:0.7em; line-height:2; opacity:0.7">
+      <p>🔗 <strong>github.com/ui5-community/jsx-runtime</strong></p>
+      <p>⭐ Star the repo &nbsp;·&nbsp; 🐛 Open issues &nbsp;·&nbsp; 🤝 PRs welcome</p>
+    </div>
+    <div style="margin-top:2em; font-size:0.6em; opacity:0.4">
+      Devtoberfest by SAP TechEd &nbsp;·&nbsp; "By developers, for developers." &nbsp;·&nbsp; Sep 21 – Oct 18, 2026
+    </div>
+  </div>
+  <aside class="notes">
+    That's a wrap! We went from two worlds — declarative XML and typed-but-imperative JS —
+    to a single world where your views are both declarative and fully type-checked.
+
+    The runtime is experimental, it's community-driven, and it needs your feedback.
+    Give it a try on a real project. Open issues. Open PRs. Help make it stable.
+
+    Thanks for joining Devtoberfest 2026. See you at the next session!
+  </aside>
+</section>
+
+</div><!-- .slides -->
+</div><!-- .reveal -->
+
+<!-- reveal.js from CDN -->
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/highlight.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/markdown/markdown.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    width: 1280,
+    height: 720,
+    margin: 0.04,
+    transition: 'slide',
+    transitionSpeed: 'fast',
+    backgroundTransition: 'fade',
+    slideNumber: 'c/t',
+    showSlideNumber: 'speaker',
+    controls: true,
+    progress: true,
+    center: true,
+    plugins: [RevealNotes, RevealHighlight, RevealMarkdown]
+  });
+</script>
+</body>
+</html>

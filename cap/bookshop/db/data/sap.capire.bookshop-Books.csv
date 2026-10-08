@@ -1,0 +1,6 @@
+ID,title,descr,author_ID,genre_ID,stock,price,currency_code
+201,Wuthering Heights,"Wuthering Heights is Emily Brontë's only novel, written between October 1845 and June 1846, and published in 1847 under the pseudonym 'Ellis Bell'.",101,15,12,11.11,GBP
+207,Jane Eyre,"Jane Eyre is a novel by English writer Charlotte Brontë, published under the pen name 'Currer Bell', on 16 October 1847.",107,11,12,12.34,GBP
+251,The Raven,"The Raven is a narrative poem by American writer Edgar Allan Poe. First published in January 1845, the poem is often noted for its musicality, stylized language, and supernatural atmosphere.",150,14,333,13.13,USD
+252,Eleonora,"Eleonora is a short story by Edgar Allan Poe, first published in 1842 in Philadelphia in the literary annual The Gift.",150,14,555,14.14,USD
+271,Catweazle,"Catweazle is a British fantasy television series created and written by Richard Carpenter for ITV.",170,13,22,150.00,EUR
