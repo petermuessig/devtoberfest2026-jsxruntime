@@ -1,5 +1,5 @@
 {
-  "name": "devtoberfest-2026-jsxruntime",
+  "name": "devtoberfest2026-jsxruntime",
   "private": true,
   "workspaces": [
     "cap/bookshop",

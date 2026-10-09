@@ -11,7 +11,7 @@ This repository contains all materials for the Devtoberfest 2026 session on the 
 ## What's in this repo
 
 ```
-devtoberfest-2026-jsxruntime/
+devtoberfest2026-jsxruntime/
   README.md                 ← you are here
   package.json              ← workspace root with single npm start script
   presentation/
