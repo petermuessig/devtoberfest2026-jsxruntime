@@ -1,7 +1,9 @@
 # UI5 Views, Reimagined: Type-Safe TSX for a Modern Dev Experience
 
 > **Devtoberfest 2026** session by SAP TechEd  
-> 📹 [Watch on YouTube](https://www.youtube.com/watch?v=B4BRUJPwVzo)
+> 📹 [Watch on YouTube](https://www.youtube.com/watch?v=B4BRUJPwVzo)  
+> 🔗 [github.com/petermuessig/devtoberfest2026-jsxruntime](https://github.com/petermuessig/devtoberfest2026-jsxruntime)  
+> 🖥️ [Slides](https://petermuessig.github.io/devtoberfest2026-jsxruntime/)
 
 This repository contains all materials for the Devtoberfest 2026 session on the community
 **JSX/TSX runtime for UI5** ([`@ui5-community/jsx-runtime`](https://github.com/ui5-community/jsx-runtime)).
@@ -96,6 +98,8 @@ latest `@sap/cds-dk`. See the [CAP Bootstrap Appendix in WALKTHROUGH.md](./prese
 
 ## Links
 
+- **This session's repo:** https://github.com/petermuessig/devtoberfest2026-jsxruntime
+- **Slides (GitHub Pages):** https://petermuessig.github.io/devtoberfest2026-jsxruntime/
 - JSX runtime repo: https://github.com/ui5-community/jsx-runtime
 - Docs & showcase: https://github.com/ui5-community/jsx-runtime/tree/main/docs
 - SAP CodeJam (original XMLView app): https://github.com/SAP-samples/ui5-exercises-codejam
