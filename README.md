@@ -56,7 +56,7 @@ import View from "sap/ui/core/mvc/View";
 import Page from "sap/m/Page";
 import Button from "sap/m/Button";
 
-/** @namespace sap.codejam.view */
+/** @alias sap.codejam.view.App */
 export default class App extends View {
   getAutoPrefixId(): boolean { return true; }
 

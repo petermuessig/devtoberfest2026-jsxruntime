@@ -1,4 +1,3 @@
-/** @namespace sap.codejam.model */
 const formatter = {
   inputLowerThanStock(stock: number, input: number): boolean {
     if (stock === undefined || input === undefined) {

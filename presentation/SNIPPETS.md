@@ -15,7 +15,7 @@ To verify: `Cmd+Shift+P` → *Insert Snippet* → you should see the snippets li
 | Prefix | Scope | What it inserts |
 |---|---|---|
 | `ui5-view` | `.tsx` | Full TSX view skeleton (View subclass + all required methods) |
-| `ui5-controller` | `.ts` | Controller skeleton with `@namespace` JSDoc |
+| `ui5-controller` | `.ts` | Controller skeleton with `@alias` JSDoc |
 | `ui5-for` | `.tsx` | `<For>` directive with factory child function |
 | `ui5-table` | `.tsx` | Full `<Table>` with named columns + `<For>` binding |
 | `ui5-objectstatus` | `.tsx` | `<ObjectStatus>` with `state` bound via formatter |

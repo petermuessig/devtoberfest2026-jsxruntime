@@ -19,14 +19,16 @@ import Title from "sap/m/Title";
 import { For } from "ui5/community/jsx/runtime/jsx-runtime";
 import formatter from "../model/formatter";
 
-/** @namespace sap.codejam.view */
+/** 
+ * @alias sap.codejam.view.App 
+ */
 export default class AppView extends View {
   getAutoPrefixId(): boolean {
     return true;
   }
 
-  getControllerName(): string {
-    return "sap.codejam.controller.App";
+  getControllerModuleName(): string {
+    return "sap/codejam/controller/App";
   }
 
   createContent(): Control {

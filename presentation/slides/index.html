@@ -247,7 +247,7 @@
     <p class="tagline" style="margin-top:0.4em">Type-Safe TSX for a Modern Dev Experience</p>
     <p style="margin-top:2em; font-size:0.65em; opacity:0.5">
       <span class="dot dot-magenta"></span>ready to use&nbsp;&nbsp;
-      <span class="dot dot-teal"></span>community&nbsp;&nbsp;
+      <span class="dot dot-teal"></span>incubation&nbsp;&nbsp;
       <span class="dot dot-blue"></span>@ui5-community/jsx-runtime
     </p>
   </div>
@@ -699,7 +699,7 @@ import View from "sap/ui/core/mvc/View";
 import type Control from "sap/ui/core/Control";
 import Page from "sap/m/Page";
 
-/** @namespace sap.codejam.view */      // ① AMD module registration (required)
+/** @alias sap.codejam.view.App */      // ① AMD module name (explicit)
 export default class AppView extends View {
   getAutoPrefixId(): boolean {          // ② scopes IDs — prevents duplicate ID warnings
     return true;
@@ -719,7 +719,7 @@ export default class AppView extends View {
   </p>
   <aside class="notes">
     Four things to remember for every TSX view:
-    1. @namespace JSDoc — required for AMD module registration
+    1. @alias JSDoc — pins the explicit dotted AMD module name (e.g. sap.codejam.view.App → module:sap/codejam/view/App)
     2. getAutoPrefixId() — scopes all control IDs to this view instance (prevents duplicate ID
        warnings when the view is used more than once; XMLViews do this implicitly)
     3. getControllerModuleName() — wires the separate controller, same as controllerName= in XML

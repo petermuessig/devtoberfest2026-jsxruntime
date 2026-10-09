@@ -236,9 +236,9 @@ Snippet: ui5-view
 
 **Explain while it fills in:**
 
-- **`/** @namespace sap.demo.view */`** — required on every class so `ui5-tooling-transpile` registers it under the correct AMD module name (`sap/demo/view/App`). Without it the module can't be found.
+- **`/** @alias sap.demo.view.App */`** — required on every extend-based class so `ui5-tooling-transpile` registers it under the correct AMD module name. `@alias` sets the **explicit** dotted name (e.g. `sap.demo.view.App` → module path `sap/demo/view/App`), decoupled from the ES class identifier. Without it the module can't be found.
 - **`getAutoPrefixId(): true`** — scopes all control IDs to this view instance (e.g. `"myBtn"` → `"app--myBtn"`). XMLViews do this automatically; TSX views need it explicit. `byId()` still works — it searches with the prefix.
-- **`getControllerName()`** — returns the dotted class name, exactly like `controllerName=` in XML. **Not** `getControllerModuleName()` — that method doesn't exist on `View` and would silently do nothing.
+- **`getControllerModuleName()`** — returns the **slash-separated** AMD module path of the controller (e.g. `"sap/demo/controller/App"`), exactly like `controllerName=` in XML but using slashes instead of dots. This is a real public method on `sap.ui.core.mvc.View` and takes precedence over `getControllerName()` when both are present.
 - **`createContent()`** — returns the root control. All JSX lives here.
 
 After the snippet fills in, update `manifest.json` rootView:
@@ -381,7 +381,7 @@ Snippet: ui5-formatter
 ```
 
 **Explain while it fills in:**
-- *"`@namespace sap.demo.model` — required so the transpiler registers it at the right AMD path."*
+- *"The formatter is a plain exported object — no `@alias` JSDoc needed (it's not an extend-based class, so the transpiler doesn't generate a UI5 class registration from it)."*
 - *"Three thresholds: ≥20 → Success (green), >0 → Warning (yellow), 0 → Error (red)."*
 - *"Import it at the top of `App.tsx`: `import formatter from '../model/formatter';` then reference as `formatter.stockState`."*
 
@@ -412,7 +412,7 @@ Snippet: ui5-controller
 ```
 
 **Explain while it fills in:**
-- *"`@namespace sap.demo.controller` must match the dotted name returned by `getControllerName()` in the view."*
+- *"`@alias sap.demo.controller.App` — the explicit dotted FQN; must match the slash path returned by `getControllerModuleName()` in the view (`sap/demo/controller/App` → dots to slashes)."*
 - *"The controller is identical to what you'd write for an XMLView. Model, bindings, `byId()` — nothing changed."*
 
 **Add the detail pane** below the Table in `App.tsx` (paste or hand-type):
@@ -517,7 +517,7 @@ Open `apps/bookshop-tsx/webapp/view/App.tsx` and `controller/App.controller.ts` 
 
 | Concept | Location |
 |---|---|
-| `@namespace` + `getControllerName()` | top of file |
+| `@alias` + `getControllerModuleName()` | top of file |
 | Full column set with `<For>` factory child | `<Table>` block |
 | `ObjectNumber` for price (not composite parts) | 4th cell in row |
 | `ObjectStatus` with `formatter.stockState` | 5th cell in row |

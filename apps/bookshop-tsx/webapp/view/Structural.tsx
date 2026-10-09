@@ -17,7 +17,9 @@ import List from "sap/m/List";
 import Button from "sap/m/Button";
 import { For, If } from "ui5/community/jsx/runtime/jsx-runtime";
 
-/** @namespace sap.codejam.view */
+/** 
+ * @alias sap.codejam.view.Structural 
+ */
 export default class Structural extends View {
   getAutoPrefixId(): boolean { return true; }
 

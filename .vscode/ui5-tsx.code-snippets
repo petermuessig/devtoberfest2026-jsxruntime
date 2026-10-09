@@ -2,14 +2,14 @@
   "UI5 TSX View skeleton": {
     "scope": "typescriptreact",
     "prefix": "ui5-view",
-    "description": "UI5 TSX View — full skeleton with getControllerName, getAutoPrefixId, createContent",
+    "description": "UI5 TSX View — full skeleton with getControllerModuleName, getAutoPrefixId, createContent",
     "body": [
       "import View from \"sap/ui/core/mvc/View\";",
       "import type Control from \"sap/ui/core/Control\";",
       "import App from \"sap/m/App\";",
       "import Page from \"sap/m/Page\";",
       "",
-      "/** @namespace ${1:dt.bookshop}.view */",
+      "/** @alias ${1:dt.bookshop}.view.${2:App} */",
       "export default class ${2:App}View extends View {",
       "",
       "  getAutoPrefixId(): boolean { return true; }",
@@ -34,13 +34,13 @@
   "UI5 TSX Main View skeleton": {
     "scope": "typescriptreact",
     "prefix": "ui5-view-main",
-    "description": "UI5 TSX Main View — full skeleton with getControllerName, getAutoPrefixId, createContent",
+    "description": "UI5 TSX Main View — full skeleton with getControllerModuleName, getAutoPrefixId, createContent",
     "body": [
       "import View from \"sap/ui/core/mvc/View\";",
       "import type Control from \"sap/ui/core/Control\";",
       "import Page from \"sap/m/Page\";",
       "",
-      "/** @namespace ${1:dt.bookshop}.view */",
+      "/** @alias ${1:dt.bookshop}.view.${2:Main} */",
       "export default class ${2:Main}View extends View {",
       "",
       "  getAutoPrefixId(): boolean { return true; }",
@@ -63,12 +63,12 @@
   "UI5 TSX Controller skeleton": {
     "scope": "typescript",
     "prefix": "ui5-controller",
-    "description": "UI5 Controller skeleton with @namespace JSDoc",
+    "description": "UI5 Controller skeleton with @alias JSDoc",
     "body": [
       "import Controller from \"sap/ui/core/mvc/Controller\";",
       "import type Event from \"sap/ui/base/Event\";",
       "",
-      "/** @namespace ${1:dt.bookshop}.controller */",
+      "/** @alias ${1:dt.bookshop}.controller.${2:App} */",
       "export default class ${2:App} extends Controller {",
       "",
       "  onInit(): void {",
@@ -82,12 +82,12 @@
   "UI5 TSX Main Controller skeleton": {
     "scope": "typescript",
     "prefix": "ui5-controller-main",
-    "description": "UI5 Main Controller skeleton with @namespace JSDoc",
+    "description": "UI5 Main Controller skeleton with @alias JSDoc",
     "body": [
       "import Controller from \"sap/ui/core/mvc/Controller\";",
       "import type Event from \"sap/ui/base/Event\";",
       "",
-      "/** @namespace ${1:dt.bookshop}.controller */",
+      "/** @alias ${1:dt.bookshop}.controller.${2:Main} */",
       "export default class ${2:Main} extends Controller {",
       "",
       "  onInit(): void {",
@@ -265,7 +265,7 @@
   "UI5 TSX formatter module": {
     "scope": "typescript",
     "prefix": "ui5-formatter",
-    "description": "Formatter module skeleton with @namespace JSDoc",
+    "description": "Formatter module skeleton (plain object, no @alias needed)",
     "body": [
       "  ${2:stockState}(${3:stock}: number): string {",
       "    if (${3:stock} >= 20) return \"Success\";",

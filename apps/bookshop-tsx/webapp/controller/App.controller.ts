@@ -10,7 +10,9 @@ import MessageToast from "sap/m/MessageToast";
 import type Context from "sap/ui/model/Context";
 import type Event from "sap/ui/base/Event";
 
-/** @namespace sap.codejam.controller */
+/** 
+ * @alias sap.codejam.controller.App 
+ */
 export default class App extends Controller {
   onInit(): void {
     this._setDetailsVisible(false);

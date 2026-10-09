@@ -12,3 +12,6 @@ dist/
 
 # Playwright MCP session data
 .playwright-mcp/
+
+# Demo
+apps/dt.bookshop
